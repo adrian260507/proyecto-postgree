@@ -1,0 +1,104 @@
+:root{
+    --radius: 16px;
+    --shadow: 0 8px 24px rgba(0,0,0,.08);
+    --border: #e9ecef;
+}
+
+/* HERO */
+section.py-5.bg-light{
+    border-radius: var(--radius);
+    background: linear-gradient(180deg,#f5f9ff,#ffffff);
+}
+@media (min-width: 992px){
+    section.py-5.bg-light .img-fluid{
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    }
+}
+
+/* CARDS de eventos */
+.card{
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+.card-img-top{
+    height: 180px;
+    object-fit: cover;
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+}
+.badge{
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+/* FILTROS laterales */
+aside .card{
+    position: sticky;
+    top: 88px;       /* queda pegado bajo el navbar */
+}
+.form-check-input,
+.form-check-label{ cursor: pointer; }
+
+/* Botones secundarios */
+.btn-light{
+    border: 1px solid var(--border);
+}
+
+/* Responsivo */
+@media (max-width: 1200px){
+    .card-img-top{ height: 200px; }
+}
+@media (max-width: 992px){
+  aside .card{ position: static; }  /* deja de ser sticky en móvil */
+    .card-img-top{ height: 220px; }
+}
+@media (max-width: 576px){
+    .card-img-top{ height: 200px; }
+}
+/* Estilos para la página de configuración */
+.configuracion-card {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.configuracion-section {
+    border-left: 4px solid #007bff;
+    padding-left: 15px;
+    margin-bottom: 2rem;
+}
+
+.configuracion-section h5 {
+    color: #495057;
+    margin-bottom: 1rem;
+}
+
+/* Mejoras para los formularios */
+.form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+/* Estilos para el dropdown del usuario */
+.dropdown-toggle::after {
+    margin-left: 0.5em;
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    margin: 2px 4px;
+    width: auto;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}

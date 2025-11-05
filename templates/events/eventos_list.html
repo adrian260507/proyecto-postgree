@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Eventos</h3>
+  {% if current_user.is_authenticated and current_user.rol_id in [2,3] %}
+    <a class="btn btn-success" href="{{ url_for('eventos.eventos_nuevo') }}">+ Nuevo</a>  
+  {% endif %}
+</div>
+
+<!-- INCLUIR FILTROS -->
+{% include "events/eventos_filtros.html" %}
+
+<div class="table-responsive">
+  <table class="table table-bordered table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Modalidad</th>
+            {% if current_user.rol_id == 2 %}
+            <th>Organizador</th>
+            {% endif %}
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Cupo</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for e in eventos %}
+        <tr>
+            <td>{{ e.nombre }}</td>
+            <td>{{ e.tipo_evento }}</td>
+            <td>
+                <span class="badge {% if e.modalidad == 'virtual' %}bg-info{% else %}bg-warning{% endif %}">
+                    {{ 'Virtual' if e.modalidad == 'virtual' else 'Presencial' }}
+                </span>
+            </td>
+            {% if current_user.rol_id == 2 %}
+            <td>
+                {% if e.id_organizador %}
+                    <!-- Aquí podrías hacer una consulta para obtener el nombre del organizador -->
+                    Organizador ID: {{ e.id_organizador }}
+                {% else %}
+                    <span class="text-muted">Sin organizador</span>
+                {% endif %}
+            </td>
+            {% endif %}
+            <td>{{ e.fecha_inicio.strftime('%d/%m/%Y') }}</td>
+            <td>{{ e.fecha_fin.strftime('%d/%m/%Y') }}</td>
+            <td>{{ e.cupo_maximo }}</td>
+            <td>
+                {% if e.activo %}
+                    {% if e.fecha_fin < now %}
+                    <span class="badge bg-secondary">Finalizado</span>
+                    {% else %}
+                    <span class="badge bg-success">Activo</span>
+                    {% endif %}
+                {% else %}
+                    <span class="badge bg-danger">Inactivo</span>
+                {% endif %}
+            </td>
+            <td class="d-flex flex-wrap gap-2">
+                {% if current_user.is_authenticated and current_user.rol_id in [2,3] %}
+                <a class="btn btn-sm btn-outline-primary" href="{{ url_for('eventos.eventos_editar', eid=e.id_evento) }}">Editar</a>
+                
+                {% if e.activo %}
+                <form method="post" action="{{ url_for('eventos.eventos_eliminar', eid=e.id_evento) }}"
+                        onsubmit="return confirm('¿Desactivar evento?')">
+                    <button class="btn btn-sm btn-outline-warning">Desactivar</button>
+                </form>
+                {% else %}
+                <form method="post" action="{{ url_for('eventos.eventos_activar', eid=e.id_evento) }}"
+                        onsubmit="return confirm('¿Activar evento?')">
+                    <button class="btn btn-sm btn-outline-success">Activar</button>
+                </form>
+                {% endif %}
+                
+                <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('eventos.asistencia', eid=e.id_evento) }}">Asistencia</a>
+                <a class="btn btn-sm btn-outline-info" href="{{ url_for('eventos.asistencia_pdf', eid=e.id_evento) }}" 
+                title="Descargar lista de asistencia">
+                📄 PDF
+                </a>
+                {% endif %}
+                
+                {% if current_user.is_authenticated and current_user.rol_id == 1 and e.activo %}
+                <form method="post" action="{{ url_for('eventos.inscribirme', eid=e.id_evento) }}">
+                    <button class="btn btn-sm btn-primary">Inscribirme</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="{% if current_user.rol_id == 2 %}9{% else %}8{% endif %}" class="text-center text-muted">No hay eventos</td></tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- PAGINACIÓN -->
+{% if pagination.pages > 1 %}
+<nav aria-label="Paginación de eventos">
+  <ul class="pagination justify-content-center">
+    {% if pagination.page > 1 %}
+    <li class="page-item">
+      <a class="page-link" href="{{ url_for('eventos.eventos_list', page=pagination.page-1, **filtros) }}">Anterior</a>
+    </li>
+    {% endif %}
+    
+    {% for p in range(1, pagination.pages + 1) %}
+    <li class="page-item {% if p == pagination.page %}active{% endif %}">
+      <a class="page-link" href="{{ url_for('eventos.eventos_list', page=p, **filtros) }}">{{ p }}</a>
+    </li>
+    {% endfor %}
+    
+    {% if pagination.page < pagination.pages %}
+    <li class="page-item">
+      <a class="page-link" href="{{ url_for('eventos.eventos_list', page=pagination.page+1, **filtros) }}">Siguiente</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+
+<div class="text-center text-muted mt-2">
+  Mostrando {{ eventos|length }} de {{ pagination.total }} eventos
+  (Página {{ pagination.page }} de {{ pagination.pages }})
+</div>
+{% endif %}
+{% endblock %}

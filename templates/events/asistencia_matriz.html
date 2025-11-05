@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3>Asistencia: {{ ev.nombre }}</h3>
+  <div class="d-flex gap-2 flex-wrap">
+    <a class="btn btn-success" href="{{ url_for('eventos.generar_qr_asistencia_page', eid=ev.id_evento) }}">
+      <i class="fas fa-qrcode me-2"></i>Generar QR de Asistencia
+    </a>
+    
+    <a class="btn btn-danger" href="{{ url_for('eventos.asistencia_pdf', eid=ev.id_evento) }}">
+      <i class="fas fa-file-pdf me-2"></i>Generar PDF
+    </a>
+    <a class="btn btn-secondary" href="{{ url_for('eventos.eventos_list') }}">Volver a eventos</a>
+  </div>
+</div>
+
+<!-- FILTRO DE DÍAS -->
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">
+      <i class="fas fa-filter me-2"></i>Filtrar por Días
+    </h5>
+    <form method="get" class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label">Fecha Inicio</label>
+        <input type="date" class="form-control" name="fecha_inicio" 
+               value="{{ fecha_inicio_filtro }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Fecha Fin</label>
+        <input type="date" class="form-control" name="fecha_fin" 
+               value="{{ fecha_fin_filtro }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">&nbsp;</label>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Aplicar Filtro</button>
+          <a href="{{ url_for('eventos.asistencia', eid=ev.id_evento) }}" 
+             class="btn btn-outline-secondary">Limpiar</a>
+        </div>
+      </div>
+    </form>
+    
+    <!-- Mostrar rango actual -->
+    {% if fecha_inicio_filtro and fecha_fin_filtro %}
+    <div class="mt-2">
+      <small class="text-muted">
+        Mostrando días del {{ fecha_inicio_filtro }} al {{ fecha_fin_filtro }} 
+        ({{ dias|length }} días de {{ total_dias }} totales)
+      </small>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Navegación por semanas -->
+{% if total_semanas > 1 %}
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        Semana {{ semana_actual + 1 }} de {{ total_semanas }}
+        <small class="text-muted">
+          (Días {{ primer_dia_semana }} al {{ ultimo_dia_semana }} de {{ total_dias }})
+        </small>
+      </h5>
+      <div class="btn-group">
+        {% if semana_actual > 0 %}
+        <a href="{{ url_for('eventos.asistencia', eid=ev.id_evento, semana=semana_actual-1, fecha_inicio=fecha_inicio_filtro, fecha_fin=fecha_fin_filtro) }}" 
+           class="btn btn-outline-primary">
+          <i class="fas fa-chevron-left me-1"></i>Semana Anterior
+        </a>
+        {% endif %}
+        
+        {% if semana_actual < total_semanas - 1 %}
+        <a href="{{ url_for('eventos.asistencia', eid=ev.id_evento, semana=semana_actual+1, fecha_inicio=fecha_inicio_filtro, fecha_fin=fecha_fin_filtro) }}" 
+           class="btn btn-outline-primary">
+          Siguiente Semana<i class="fas fa-chevron-right ms-1"></i>
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    
+    <!-- Selector rápido de semanas -->
+    <div class="mt-2">
+      <small class="text-muted">Ir a semana:</small>
+      <div class="btn-group btn-group-sm ms-2">
+        {% for s in range(total_semanas) %}
+        <a href="{{ url_for('eventos.asistencia', eid=ev.id_evento, semana=s, fecha_inicio=fecha_inicio_filtro, fecha_fin=fecha_fin_filtro) }}" 
+           class="btn btn-outline-secondary {% if s == semana_actual %}active{% endif %}">
+          {{ s + 1 }}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<form method="post">
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle">
+      <thead>
+        <tr>
+          <th>Participante</th>
+          {% for d in dias %}
+            <th class="text-center">{{ d.strftime('%d/%m') }}<br><small>{{ d.strftime('%a') }}</small></th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in inscritos %}
+        <tr>
+          <td>
+            <strong>{{ i.nombre }}</strong><br>
+            <small class="text-muted">{{ i.correo }}</small>
+          </td>
+          {% for d in dias %}
+            {% set key = (i.ID_usuario, d.isoformat()) %}
+            <td class="checkbox-cell text-center">
+              <input type="checkbox" name="asis[{{ i.ID_usuario }}][{{ d }}]" 
+                     {% if asis_map.get(key) %}checked{% endif %}>
+            </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {# lista de uids como múltiples inputs hidden #}
+  {% for i in inscritos %}
+    <input type="hidden" name="uids" value="{{ i.ID_usuario }}">
+  {% endfor %}
+
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary">Guardar asistencia</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('eventos.eventos_list') }}">Cancelar</a>
+  </div>
+</form>
+
+<!-- Información sobre el sistema QR -->
+<div class="card mt-4">
+  <div class="card-body">
+    <h5 class="card-title">
+      <i class="fas fa-info-circle text-primary me-2"></i>Sistema de Asistencia por QR
+    </h5>
+    <p class="card-text">
+      Con el sistema de QR, los participantes pueden marcar su asistencia automáticamente escaneando el código.
+    </p>
+    <div class="row">
+      <div class="col-md-6">
+        <h6>Para el organizador:</h6>
+        <ul class="small">
+          <li>Haz clic en "Generar QR de Asistencia"</li>
+          <li>Muestra el código QR en pantalla o impreso</li>
+          <li>Los participantes escanean el código</li>
+          <li>La asistencia se marca automáticamente</li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <h6>Para el participante:</h6>
+        <ul class="small">
+          <li>Abre la cámara o app de QR en tu celular</li>
+          <li>Escanea el código QR del evento</li>
+          <li>Si no has iniciado sesión, se te pedirá que lo hagas</li>
+          <li>¡Tu asistencia quedará registrada automáticamente!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.checkbox-cell {
+  vertical-align: middle;
+}
+.table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+</style>
+
+<!-- Incluir Font Awesome para los íconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Certificado No Disponible - Connexa{% endblock %}
+
+{% block header_title %}❌ Certificado No Disponible{% endblock %}
+
+{% block content %}
+<h2>Hola {{ usuario_nombre }},</h2>
+
+<p>Lamentamos informarte que <strong>no has cumplido con el porcentaje mínimo de asistencia</strong> requerido para recibir el certificado.</p>
+
+<!-- Información detallada de la participación -->
+<div class="info-box">
+    <h3 class="mt-0">📊 Información de tu participación</h3>
+    <p><strong>Evento:</strong> {{ evento_nombre }}</p>
+    <p><strong>Tipo:</strong> {{ evento_tipo }}</p>
+    <p><strong>Fechas:</strong> {{ fecha_inicio }} - {{ fecha_fin }}</p>
+    <p><strong>Tu porcentaje de asistencia:</strong> 
+        <span style="font-size: 32px; font-weight: bold; color: #dc3545; display: block;">{{ porcentaje_asistencia }}%</span>
+    </p>
+    <p><strong>Porcentaje requerido:</strong> 80%</p>
+</div>
+
+<!-- Razón específica por la que no se certifica -->
+
+<div style="padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #ffeaa7; background-color: #fff3cd; color: #856404;">
+    <h4 style="margin-top: 0;">📝 Razón de no certificación:</h4>
+    <p>{{ mensaje_razon }}</p>
+</div>
+
+<p>Agradecemos tu interés en el evento y te esperamos en futuras actividades.</p>
+{% endblock %}

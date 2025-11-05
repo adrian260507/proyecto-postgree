@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>{{ 'Nuevo evento' if modo=='nuevo' else 'Editar evento' }}</h3>
+<form method="post" id="eventoForm">
+  <div class="row g-3">
+        <!-- Campos básicos del evento -->
+
+    <div class="col-md-6">
+      <label class="form-label">Nombre</label>
+      <input name="nombre" class="form-control" value="{{ ev.nombre if ev else '' }}" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Tipo</label>
+      <select name="tipo_evento" class="form-select">
+        {% for t in tipos %}
+          <option value="{{t}}" {% if ev and ev.tipo_evento==t %}selected{% endif %}>{{t}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    
+    <!-- Fechas -->
+    <div class="col-md-6">
+      <label class="form-label">Fecha inicio</label>
+      <input type="date" name="fecha_inicio" class="form-control"
+            value="{{ ev.fecha_inicio.strftime('%Y-%m-%d') if ev and ev.fecha_inicio else '' }}" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Fecha fin</label>
+      <input type="date" name="fecha_fin" class="form-control"
+            value="{{ ev.fecha_fin.strftime('%Y-%m-%d') if ev and ev.fecha_fin else '' }}" required>
+    </div>
+    
+    <!-- Horarios diarios - CORREGIDO -->
+    <div class="col-md-6">
+      <label class="form-label">Hora inicio diaria</label>
+      <input type="time" name="hora_inicio_diaria" class="form-control"
+            value="{% if ev %}{{ ev.hora_inicio_diaria|format_time('09:00') }}{% else %}09:00{% endif %}" required>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Hora fin diaria</label>
+      <input type="time" name="hora_fin_diaria" class="form-control"
+            value="{% if ev %}{{ ev.hora_fin_diaria|format_time('17:00') }}{% else %}17:00{% endif %}" required>
+    </div>
+    
+    <!-- Selección de modalidad con cambio dinámico -->
+    <div class="col-md-6">
+      <label class="form-label">Modalidad</label>
+      <select name="modalidad" class="form-select" id="modalidad" required 
+              onchange="toggleEnlaceVirtual()">
+        <option value="presencial" {% if ev and ev.modalidad=='presencial' %}selected{% endif %}>
+          Presencial
+        </option>
+        <option value="virtual" {% if ev and ev.modalidad=='virtual' %}selected{% endif %}>
+          Virtual
+        </option>
+      </select>
+    </div>
+    
+    <!-- Enlace virtual - CORREGIDO -->
+    <div class="col-md-6" id="enlaceVirtualContainer" 
+         {% if ev and ev.modalidad=='virtual' %}style="display: block;"{% else %}style="display: none;"{% endif %}>
+      <label class="form-label">Enlace de la sesión virtual <span class="text-danger">*</span></label>
+      <input type="url" name="enlace_virtual" class="form-control" 
+             value="{{ ev.enlace_virtual if ev else '' }}"
+             placeholder="https://meet.google.com/xxx-xxxx-xxx o https://zoom.us/j/..."
+             id="enlace_virtual">
+      <div class="form-text">Este enlace se enviará por correo a los participantes inscritos.</div>
+    </div>
+    
+    <!-- Ubicación -->
+    <div class="col-md-6" id="lugarContainer">
+      <label class="form-label">Lugar</label>
+      <input name="lugar" class="form-control" value="{{ ev.lugar if ev else '' }}"
+             id="lugar_input">
+    </div>
+    <div class="col-md-6" id="ciudadContainer">
+      <label class="form-label">Ciudad</label>
+      <input name="ciudad" class="form-control" value="{{ ev.ciudad if ev else '' }}"
+             id="ciudad_input">
+    </div>
+    
+      <!-- Cupo máximo del evento -->
+
+    <div class="col-md-4">
+      <label class="form-label">Cupo máximo</label>
+      <input type="number" min="1" name="cupo_maximo" class="form-control"
+            value="{{ ev.cupo_maximo if ev else 10 }}" required>
+    </div>
+  </div>
+    <!-- Descripción del evento -->
+
+  <div class="mt-3">
+    <label class="form-label">Descripción</label>
+    <textarea name="descripcion" class="form-control" rows="5">{{ ev.descripcion if ev else '' }}</textarea>
+  </div>
+  <!-- Botones de acción -->
+
+  <div class="mt-3 d-flex gap-2">
+    <button type="submit" class="btn btn-primary" onclick="return validarFormulario()">Guardar</button>
+    <a class="btn btn-secondary" href="{{ url_for('eventos.eventos_list') }}">Volver</a>
+  </div>
+</form>
+
+
+<style>
+#enlaceVirtualContainer .form-text {
+    font-size: 0.875em;
+    color: #6c757d;
+}
+</style>
+{% endblock %}

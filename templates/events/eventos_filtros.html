@@ -1,0 +1,73 @@
+<!-- templates/events/eventos_filtros.html -->
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">
+      <i class="fas fa-filter me-2"></i>Filtrar Eventos
+    </h5>
+    <form method="get" class="row g-3">
+      <input type="hidden" name="page" value="1">
+      
+      <div class="col-md-3">
+        <label class="form-label">Nombre</label>
+        <input type="text" class="form-control" name="nombre" 
+               value="{{ filtros.nombre }}" placeholder="Buscar por nombre...">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Tipo</label>
+        <select class="form-select" name="tipo">
+          <option value="">Todos</option>
+          {% for tipo in ['foro','debate','taller','simposio','panel de expertos','seminario','conferencia'] %}
+          <option value="{{ tipo }}" {% if filtros.tipo == tipo %}selected{% endif %}>
+            {{ tipo|capitalize }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Modalidad</label>
+        <select class="form-select" name="modalidad">
+          <option value="">Todas</option>
+          <option value="presencial" {% if filtros.modalidad == 'presencial' %}selected{% endif %}>Presencial</option>
+          <option value="virtual" {% if filtros.modalidad == 'virtual' %}selected{% endif %}>Virtual</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Estado</label>
+        <select class="form-select" name="estado">
+          <option value="">Todos</option>
+          <option value="activo" {% if filtros.estado == 'activo' %}selected{% endif %}>Activos</option>
+          <option value="inactivo" {% if filtros.estado == 'inactivo' %}selected{% endif %}>Inactivos</option>
+          <option value="futuro" {% if filtros.estado == 'futuro' %}selected{% endif %}>Futuros</option>
+          <option value="pasado" {% if filtros.estado == 'pasado' %}selected{% endif %}>Pasados</option>
+        </select>
+      </div>
+      {% if organizadores %}
+      <div class="col-md-3">
+        <label class="form-label">Organizador</label>
+        <select class="form-select" name="organizador">
+          <option value="">Todos</option>
+          {% for org in organizadores %}
+          <option value="{{ org.ID_usuario }}" {% if filtros.organizador|string == org.ID_usuario|string %}selected{% endif %}>
+            {{ org.nombre }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+      <div class="col-md-2">
+        <label class="form-label">Fecha Inicio Desde</label>
+        <input type="date" class="form-control" name="fecha_desde" value="{{ filtros.fecha_desde }}">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Fecha Fin Hasta</label>
+        <input type="date" class="form-control" name="fecha_hasta" value="{{ filtros.fecha_hasta }}">
+      </div>
+      <div class="col-md-2 align-self-end">
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Filtrar</button>
+          <a href="{{ url_for('eventos.eventos_list') }}" class="btn btn-outline-secondary">Limpiar</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

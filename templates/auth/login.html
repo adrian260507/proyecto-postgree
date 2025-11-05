@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+/* ====== Fondo del login ====== */
+body {
+  background: url("{{ url_for('static', filename='images/fondo.jpeg') }}") no-repeat center center fixed;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+/* ====== Tarjeta del formulario ====== */
+.card {
+  background-color: rgba(255, 255, 255, 0.92);
+  border-radius: 15px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(3px);
+}
+
+/* Centrado vertical y horizontal */
+.row.justify-content-center {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+/* Título */
+h3 {
+  font-weight: 600;
+  color: #0d6efd;
+}
+
+/* Botón principal */
+.btn-primary {
+  background-color: #0d6efd;
+  border: none;
+}
+.btn-primary:hover {
+  background-color: #0b5ed7;
+}
+
+/* Enlaces inferiores */
+a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+</style>
+
+<div class="row justify-content-center align-items-center">
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="mb-3 text-center">Iniciar sesión</h3>
+        <form method="post" autocomplete="on">
+          <div class="mb-3">
+            <label class="form-label" for="login_correo">Correo</label>
+            <input id="login_correo" name="correo" type="email"
+                  class="form-control" autocomplete="username" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="login_pass">Contraseña</label>
+            <input id="login_pass" name="contrasena" type="password"
+                  class="form-control" autocomplete="current-password" required>
+          </div>
+          <button class="btn btn-primary w-100">Entrar</button>
+        </form>
+        <div class="text-center mt-3">
+          <a href="{{ url_for('auth.forgot') }}">¿Olvidaste tu contraseña?</a>
+        </div>
+        <div class="text-center mt-2">
+          <a href="{{ url_for('auth.registro') }}">Crear cuenta</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

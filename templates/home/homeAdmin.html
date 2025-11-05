@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Panel Administrador</h3>
+<p class="text-muted">Gestiona usuarios, roles y eventos.</p>
+<div class="d-flex gap-2 flex-wrap">
+  <a class="btn btn-dark" href="{{ url_for('admin_roles') }}">Asignar roles</a>
+  <a class="btn btn-primary" href="{{ url_for('eventos_list') }}">Ver eventos</a>
+  <a class="btn btn-success" href="{{ url_for('eventos_nuevo') }}">Crear evento</a>
+</div>
+{% endblock %}

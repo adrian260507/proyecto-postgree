@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title text-center mb-4">Configuración de Cuenta</h3>
+
+        <!-- Información Personal -->
+        <h5 class="mb-3">Información Personal</h5>
+        <form method="post" action="{{ url_for('auth.configuracion_usuario') }}">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label" for="nombre">Nombre</label>
+              <input class="form-control" id="nombre" name="nombre" 
+                     value="{{ usuario.nombre }}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="apellido">Apellidos</label>
+              <input class="form-control" id="apellido" name="apellido" 
+                     value="{{ usuario.apellido or '' }}">
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <label class="form-label" for="correo">Correo electrónico</label>
+            <input class="form-control" id="correo" type="email" 
+                   value="{{ usuario.correo }}" disabled>
+            <div class="form-text">El correo electrónico no se puede cambiar.</div>
+          </div>
+
+          <div class="row g-3 mt-0">
+            <div class="col-md-6">
+              <label class="form-label" for="documento_id">Documento de identidad</label>
+              <input class="form-control" id="documento_id" name="documento_id" 
+                     value="{{ usuario.documento_id or '' }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="celular">Celular</label>
+              <input class="form-control" id="celular" name="celular" 
+                     value="{{ usuario.celular or '' }}">
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          </div>
+        </form>
+
+        <!-- Cambiar Contraseña -->
+        <hr class="my-4">
+        <h5 class="mb-3">Cambiar Contraseña</h5>
+        <form method="post" action="{{ url_for('auth.cambiar_password') }}">
+          <div class="mb-3">
+            <label class="form-label" for="password_actual">Contraseña actual</label>
+            <input type="password" class="form-control" id="password_actual" 
+                   name="password_actual" required>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label" for="nueva_password">Nueva contraseña</label>
+            <input type="password" class="form-control" id="nueva_password" 
+                   name="nueva_password" required minlength="6">
+            <div class="form-text">Mínimo 6 caracteres.</div>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label" for="confirmar_password">Confirmar nueva contraseña</label>
+            <input type="password" class="form-control" id="confirmar_password" 
+                   name="confirmar_password" required>
+          </div>
+
+          <button type="submit" class="btn btn-warning">Cambiar contraseña</button>
+        </form>
+
+        <!-- Información de la cuenta -->
+        <hr class="my-4">
+        <h5 class="mb-3">Información de la Cuenta</h5>
+        <div class="row">
+          <div class="col-md-6">
+            <strong>Fecha de registro:</strong><br>
+            {{ usuario.created_at.strftime('%d/%m/%Y') if usuario.created_at else 'No disponible' }}
+          </div>
+          <div class="col-md-6">
+            <strong>Estado:</strong><br>
+            {% if usuario.email_verified %}
+              <span class="badge bg-success">✅ Correo verificado</span>
+            {% else %}
+              <span class="badge bg-warning">⚠️ Correo no verificado</span>
+              <a href="{{ url_for('auth.verify_email', user_id=usuario.id) }}" class="btn btn-sm btn-outline-primary ms-2">
+                Verificar ahora
+              </a>
+            {% endif %}
+          </div>
+        </div> 
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="text-center mb-1 brand">Connexa</h3>
+        <h4 class="text-center mb-4">Crea una cuenta</h4>
+
+        <form method="post" autocomplete="on">
+          <div class="row g-2">
+            <div class="col-md-6">
+              <label class="form-label" for="nombre">Nombre</label>
+              <input class="form-control" id="nombre" name="nombre"
+                    autocomplete="given-name" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="apellido">Apellidos</label>
+              <input class="form-control" id="apellido" name="apellido"
+                    autocomplete="family-name" required>
+            </div>
+          </div>
+
+          <div class="mt-2">
+            <label class="form-label" for="correo">Correo electrónico</label>
+            <input class="form-control" id="correo" type="email" name="correo"
+                  autocomplete="email" required>
+          </div>
+
+          <div class="row g-2 mt-2">
+            <div class="col-md-6">
+              <label class="form-label" for="documento_id">Documento</label>
+              <input class="form-control" id="documento_id" name="documento_id"
+                    autocomplete="off" inputmode="numeric" pattern="\d*">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="celular">Celular (opcional)</label>
+              <input class="form-control" id="celular" name="celular"
+                    autocomplete="tel" inputmode="tel">
+            </div>
+          </div>
+
+          <div class="mt-2">
+            <label class="form-label" for="contrasena">Contraseña nueva</label>
+            <input class="form-control" id="contrasena" type="password" name="contrasena"
+                  autocomplete="new-password" required>
+          </div>
+
+          <button class="btn btn-success w-100 mt-3">Registrarte</button>
+          <p class="mt-2 text-center"><a href="{{ url_for('auth.login') }}">¿Ya tienes una cuenta?</a></p>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

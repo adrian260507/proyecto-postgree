@@ -1,0 +1,35 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Nuevo Mensaje de Contacto - Connexa{% endblock %}
+
+{% block header_title %}📧 Nuevo Mensaje de Contacto{% endblock %}
+
+{% block content %}
+<h2>Información del Contacto</h2>
+
+<!-- Datos del remitente -->
+
+<div class="info-box">
+    <h3 class="mt-0">👤 Datos del Remitente</h3>
+    <p><strong>Nombre:</strong> {{ nombre }}</p>
+    <p><strong>Email:</strong> {{ email }}</p>
+    <p><strong>Teléfono:</strong> {{ telefono or 'No proporcionado' }}</p>
+    <p><strong>Asunto:</strong> {{ asunto }}</p>
+    <p><strong>Fecha:</strong> {{ fecha_consulta }}</p>
+</div>
+
+<!-- Mensaje del usuario -->
+
+<div class="email-alert alert-info">
+    <h3 class="mt-0">💬 Mensaje</h3>
+    <p>{{ mensaje|replace('\n', '<br>')|safe }}</p>
+</div>
+
+<!-- Información técnica para seguimiento -->
+
+<div style="background: #f8f9fa; padding: 15px; border-radius: 5px; font-size: 12px; color: #666;">
+    <h4>🔍 Información Técnica</h4>
+    <p><strong>IP:</strong> {{ ip_address }}</p>
+    <p><strong>Navegador:</strong> {{ user_agent }}</p>
+</div>
+{% endblock %}

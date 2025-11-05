@@ -1,0 +1,218 @@
+<!-- templates/quienes_somos.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Encabezado -->
+            <div class="text-center mb-5">
+                <h1 class="display-4 fw-bold text-primary mb-3">Quiénes Somos</h1>
+                <p class="lead text-muted">
+                    Conoce al equipo detrás de Connexa
+                </p>
+            </div>
+
+            <!-- Misión y Visión -->
+            <div class="row mb-5">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-bullseye fa-3x text-primary"></i>
+                            </div>
+                            <h4 class="card-title text-dark">Nuestra Misión</h4>
+                            <p class="card-text text-muted">
+                                Facilitar la organización y participación en eventos académicos y profesionales 
+                                mediante una plataforma intuitiva que conecta organizadores con participantes 
+                                interesados en el crecimiento personal y profesional.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-eye fa-3x text-success"></i>
+                            </div>
+                            <h4 class="card-title text-dark">Nuestra Visión</h4>
+            <p class="card-text text-muted">
+                Ser la plataforma líder en gestión de eventos educativos y profesionales, 
+                reconocida por su innovación, confiabilidad y compromiso con la excelencia 
+                en el servicio a nuestra comunidad de usuarios.
+            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Equipo de Desarrollo -->
+            <div class="mb-5">
+                <h2 class="text-center mb-4">Nuestro Equipo</h2>
+                <div class="row justify-content-center">
+                    <!-- Miembro 1 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <img src="static/images/adrian_img.jpeg" 
+                                 class="card-img-top" alt="Desarrollador" style="height: 250px; object-fit: cover;">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Adrian Serna</h5>
+                                <p class="text-muted">Desarrollador Full Stack</p>
+                                <p class="card-text small">
+                                    Especialista en desarrollo web con Python/Flask y tecnologías modernas. 
+                                    Apasionado por crear soluciones innovadoras.
+                                </p>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <span class="badge bg-primary">Python</span>
+                                    <span class="badge bg-info">Flask</span>
+                                    <span class="badge bg-success">MySQL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Miembro 2 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <img src="static/images/emily_img.png" 
+                                 class="card-img-top" alt="Diseñadora" style="height: 250px; object-fit: cover;">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Emily Roriguez</h5>
+                                <p class="text-muted">Diseñadora UX/UI</p>
+                                <p class="card-text small">
+                                    Experta en experiencia de usuario e interfaces intuitivas. 
+                                    Comprometida con crear diseños que mejoren la interacción humana.
+                                </p>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <span class="badge bg-warning">HTML5</span>
+                                    <span class="badge bg-danger">CSS3</span>
+                                    <span class="badge bg-secondary">UI/UX</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Miembro 3 -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <img src="static/images/sebastian_img.jpeg" 
+                                 class="card-img-top" alt="Administrador" style="height: 250px; object-fit: cover;">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Sebastian Cova</h5>
+                                <p class="text-muted">Diseñador UX/UI</p>
+                                <p class="card-text small">
+                                    Especialista en infraestructura y deployment. 
+                                    Garantiza que la plataforma esté siempre disponible y segura.
+                                </p>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <span class="badge bg-warning">HTML5</span>
+                                    <span class="badge bg-danger">CSS3</span>
+                                    <span class="badge bg-secondary">UI/UX</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <!-- Agregar después del tercer miembro -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="static/images/Miguel_img.jpeg" 
+                            class="card-img-top" alt="Gestor de Proyectos" style="height: 250px; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Miguel Abello</h5>
+                            <p class="text-muted">Gestor de Proyectos</p>
+                            <p class="card-text small">
+                                Coordina y supervisa el desarrollo del proyecto, 
+                                asegurando que cumpla con los objetivos y plazos establecidos.
+                            </p>
+                            <div class="d-flex justify-content-center gap-2">
+                                <span class="badge bg-primary">Python</span>
+                                <span class="badge bg-info">Gestión</span>
+                                <span class="badge bg-success">Planificación</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            <!-- Tecnologías Utilizadas -->
+            <div class="mb-5">
+                <h2 class="text-center mb-4">Tecnologías que Usamos</h2>
+                <div class="row text-center">
+                    <div class="col-md-2 col-4 mb-3">
+                        <div class="p-3 border rounded">
+                            <i class="fab fa-python fa-2x text-primary mb-2"></i>
+                            <p class="small mb-0">Python</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-4 mb-3">
+                        <div class="p-3 border rounded">
+                            <i class="fas fa-fire fa-2x text-warning mb-2"></i>
+                            <p class="small mb-0">Flask</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-4 mb-3">
+                        <div class="p-3 border rounded">
+                            <i class="fas fa-database fa-2x text-info mb-2"></i>
+                            <p class="small mb-0">MySQL</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-4 mb-3">
+                        <div class="p-3 border rounded">
+                            <i class="fab fa-html5 fa-2x text-danger mb-2"></i>
+                            <p class="small mb-0">HTML5</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-4 mb-3">
+                        <div class="p-3 border rounded">
+                            <i class="fab fa-css3-alt fa-2x text-primary mb-2"></i>
+                            <p class="small mb-0">CSS3</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Contacto -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center p-5">
+                    <h3 class="card-title mb-3">¿Tienes alguna pregunta?</h3>
+                    <p class="card-text text-muted mb-4">
+                        Estamos aquí para ayudarte. No dudes en contactarnos si necesitas 
+                        soporte o tienes sugerencias para mejorar nuestra plataforma.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-envelope text-primary me-2"></i>
+                            <span>asistenciasgtc@gmail.com</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-phone text-success me-2"></i>
+                            <span>+57 324 3910566</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                            <span>Combarranquilla boston</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Agregar Font Awesome para los íconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+.card {
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: translateY(-5px);
+}
+.badge {
+    font-size: 0.7em;
+}
+</style>
+{% endblock %}

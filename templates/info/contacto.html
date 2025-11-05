@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Encabezado -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold text-primary">Contáctenos</h1>
+                <p class="lead text-muted">
+                    ¿Tienes preguntas, comentarios o necesitas ayuda? Estamos aquí para ayudarte.
+                </p>
+            </div>
+
+            <div class="row">
+                <!-- Formulario de Contacto -->
+                <div class="col-md-8">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-4">
+                            <form method="POST" action="{{ url_for('publico.contacto') }}" id="contactForm">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="nombre" class="form-label">Nombre completo *</label>
+                                        <input type="text" class="form-control" id="nombre" name="nombre" 
+                                               required minlength="2" maxlength="100">
+                                        <div class="form-text">Tu nombre completo</div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label">Correo electrónico *</label>
+                                        <input type="email" class="form-control" id="email" name="email" 
+                                               required>
+                                        <div class="form-text">Tu correo de contacto</div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <label for="telefono" class="form-label">Teléfono</label>
+                                        <input type="tel" class="form-control" id="telefono" name="telefono"
+                                               pattern="[0-9+\- ]+" title="Solo números, +, - y espacios">
+                                        <div class="form-text">Opcional - Incluye código de país</div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <label for="asunto" class="form-label">Asunto *</label>
+                                        <select class="form-select" id="asunto" name="asunto" required>
+                                            <option value="" selected disabled>Selecciona un asunto...</option>
+                                            <option value="Soporte técnico">Soporte técnico</option>
+                                            <option value="Información sobre eventos">Información sobre eventos</option>
+                                            <option value="Problemas con certificados">Problemas con certificados</option>
+                                            <option value="Sugerencias">Sugerencias</option>
+                                            <option value="Reportar problema">Reportar problema</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <label for="mensaje" class="form-label">Mensaje *</label>
+                                        <textarea class="form-control" id="mensaje" name="mensaje" 
+                                                  rows="6" required minlength="10" maxlength="1000"
+                                                  placeholder="Describe tu consulta, comentario o problema..."></textarea>
+                                        <div class="form-text">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="acepto" name="acepto" required>
+                                            <label class="form-check-label" for="acepto">
+                                                Acepto que mis datos sean procesados según la 
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#politicaModal">
+                                                    política de privacidad
+                                                </a>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary btn-lg w-100" id="btnEnviar">
+                                            <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                                            Enviar mensaje
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Información de Contacto -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-4">Información de contacto</h5>
+                            
+                            <div class="d-flex align-items-start mb-4">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-envelope text-primary fa-lg"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Correo electrónico</h6>
+                                    <p class="text-muted mb-0">asistenciasgtc@gmail.com</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-start mb-4">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-phone text-success fa-lg"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Teléfono</h6>
+                                    <p class="text-muted mb-0">+57 324 3910566</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-start mb-4">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-clock text-warning fa-lg"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Horario de atención</h6>
+                                    <p class="text-muted mb-0">Lunes a Viernes<br>9:00 AM - 6:00 PM</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-map-marker-alt text-danger fa-lg"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Ubicación</h6>
+                                    <p class="text-muted mb-0">barranquilla<br>combarranquilla</p>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
+                            <div class="text-center">
+                                <p class="small text-muted">
+                                    <strong>Tiempo de respuesta:</strong><br>
+                                    Normalmente respondemos en menos de 24 horas
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Política de Privacidad -->
+<div class="modal fade" id="politicaModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Política de Privacidad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>En Connexa, nos comprometemos a proteger tu privacidad. Los datos que nos proporciones serán utilizados únicamente para:</p>
+                <ul>
+                    <li>Responder a tu consulta o solicitud</li>
+                    <li>Mejorar nuestros servicios</li>
+                    <li>Mantenerte informado sobre eventos relevantes (si así lo autorizas)</li>
+                </ul>
+                <p>No compartiremos tu información con terceros sin tu consentimiento explícito.</p>
+                <p>Puedes solicitar la eliminación de tus datos en cualquier momento contactándonos.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Agregar Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+.card {
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: translateY(-2px);
+}
+.form-control:focus, .form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+</style>
+
+
+{% endblock %}

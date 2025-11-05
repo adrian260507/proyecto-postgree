@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-6">
+        <!-- Imagen del evento según su tipo -->
+
+    <img src="{{ ev.tipo_evento|imagen_evento }}" alt="{{ ev.tipo_evento }}" class="img-fluid rounded-3 shadow-sm w-100">
+  </div>
+    <!-- Badges de tipo y modalidad del evento -->
+
+  <div class="col-lg-6">
+    <span class="badge text-bg-secondary">{{ ev.tipo_evento|capitalize }}</span>
+    <span class="badge bg-secondary">
+        {{ 'Virtual' if ev.modalidad == 'virtual' else 'Presencial' }}
+    </span>
+    <h1 class="mt-2">{{ ev.nombre }}</h1>
+
+          <!-- En la sección de información del evento, agrega: -->
+      <p class="text-muted mb-2">
+        {{ ev.fecha_inicio|fecha_larga }}
+        {% if ev.fecha_fin and ev.fecha_fin != ev.fecha_inicio %} 
+          – {{ ev.fecha_fin|fecha_larga }}
+        {% endif %}
+      </p>
+
+        {% if ev.hora_inicio_diaria and ev.hora_fin_diaria %}
+        <p class="text-muted mb-2">
+        🕐 Horario: {{ ev.hora_inicio_diaria|format_time }} - {{ ev.hora_fin_diaria|format_time }}
+        </p>
+        {% endif %}
+          
+    <!-- Mostrar ubicación solo para eventos presenciales -->
+    {% if ev.modalidad == 'presencial' %}
+    <p class="text-muted">{{ ev.ciudad or ev.lugar or 'Sin ubicación' }}</p>
+    {% else %}
+    <p class="text-muted">📡 Evento virtual</p>
+    {% endif %}
+
+        <!-- Descripción del evento -->
+
+    <div class="my-3">
+      {% if ev.descripcion %}
+        <p style="white-space:pre-line">{{ ev.descripcion }}</p>
+      {% else %}
+        <p class="text-muted">El organizador aún no agregó una descripción.</p>
+      {% endif %}
+    </div>
+
+    <!-- Botones de acción según el rol del usuario -->
+
+<div class="d-flex gap-2 mb-3">
+    {% if current_user.is_authenticated and current_user.rol_id == 1 %}
+        {% if insc %}
+            <button class="btn btn-secondary" disabled>✅ Ya estás inscrito</button>
+        {% else %}
+            <form method="post" action="{{ url_for('eventos.inscribirme', eid=ev.id_evento) }}">
+                <button class="btn btn-primary">Inscribirme</button>
+            </form>
+        {% endif %}
+    {% elif current_user.is_authenticated and current_user.rol_id in [2, 3] %}
+        <button class="btn btn-secondary" disabled>Solo para participantes</button>
+    {% else %}
+        <a class="btn btn-outline-primary" href="{{ url_for('auth.login') }}">
+            Inicia sesión para inscribirte
+        </a>
+    {% endif %}
+    <a class="btn btn-light" href="{{ url_for('eventos.eventos_list') }}">Volver a eventos</a>
+</div>
+
+    <!-- Acciones de participación y certificado -->
+<!-- En la sección de participación del usuario -->
+{% if current_user.is_authenticated %}
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Tu participación</h5>
+            <p><strong>Participante:</strong> {{ current_user.nombre }}</p>
+
+            {% if insc %}
+                <!-- Mostrar porcentaje de asistencia -->
+                <div class="alert alert-info">
+                    <strong>📊 Tu asistencia:</strong> {{ "%.1f"|format(insc.porcentaje_asistencia or 0) }}%
+                    {% if insc.porcentaje_asistencia and insc.porcentaje_asistencia >= 80 %}
+                        <span class="badge bg-success ms-2">✅ Certificado disponible</span>
+                    {% elif insc.porcentaje_asistencia %}
+                        <span class="badge bg-warning ms-2">⏳ {{ "%.1f"|format(80 - insc.porcentaje_asistencia) }}% faltante</span>
+                    {% endif %}
+                </div>
+
+                <!-- MOSTRAR ENLACE VIRTUAL SOLO SI ESTÁ INSCRITO Y EL EVENTO ES VIRTUAL -->
+                {% if ev.modalidad == 'virtual' and ev.enlace_virtual %}
+                <div class="alert alert-info mt-2">
+                    <h6>🔗 Enlace de acceso al evento virtual</h6>
+                    <p class="mb-1"><a href="{{ ev.enlace_virtual }}" target="_blank">{{ ev.enlace_virtual }}</a></p>
+                    <small class="text-muted">Este enlace es exclusivo para participantes inscritos. Guárdalo para el día del evento.</small>
+                </div>
+                {% endif %}
+
+                <!-- BOTÓN DE CERTIFICADO CONDICIONADO AL 80% -->
+                {% if insc.asistio and insc.porcentaje_asistencia and insc.porcentaje_asistencia >= 80 %}
+                    <a href="{{ url_for('eventos.certificado', insc_id=insc.id_inscripcion) }}"
+                       class="btn btn-success">
+                       📜 Descargar certificado
+                    </a>
+                    <small class="text-muted d-block mt-1">
+                        ✅ El certificado también se ha enviado a tu correo electrónico.
+                    </small>
+                {% elif insc.asistio %}
+                    <div class="alert alert-warning mt-2">
+                        <strong>Estado:</strong> Asistencia confirmada<br>
+                        El certificado estará disponible cuando alcances el 80% de asistencia. 
+                        Tu progreso actual: {{ "%.1f"|format(insc.porcentaje_asistencia or 0) }}%
+                    </div>
+                {% else %}
+                    <div class="alert alert-info mt-2">
+                        <strong>Estado:</strong> Inscrito<br>
+                        El certificado estará disponible cuando el organizador confirme tu asistencia y alcances el 80%.
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-info mt-2">
+                    {% if ev.modalidad == 'virtual' %}
+                        Inscríbete para obtener el enlace de acceso al evento virtual.
+                    {% else %}
+                        No estás inscrito en este evento.  
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% else %}
+
+    <!-- Mensaje para usuarios no autenticados -->
+
+    <div class="alert alert-info mt-3">
+        <a class="btn btn-outline-primary" href="{{ url_for('auth.login') }}">Inicia sesión</a> para inscribirte o acceder a tu certificado.
+    </div>
+{% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h3 class="mb-4">Mis Eventos</h3>
+
+    <!-- Formulario de Filtros -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">
+                Filtrar Mis Eventos
+            </h5>
+            <form method="get" class="row g-3">
+                <!-- Campo oculto para mantener la página actual (se reseteará a 1 al filtrar) -->
+                <input type="hidden" name="page" value="1">
+                
+                <!-- Filtro por nombre -->
+                <div class="col-md-3">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-control" name="nombre" 
+                           value="{{ filtros.nombre }}" placeholder="Buscar por nombre...">
+                </div>
+
+                <!-- Filtro por tipo -->
+                <div class="col-md-2">
+                    <label class="form-label">Tipo</label>
+                    <select class="form-select" name="tipo">
+                        <option value="">Todos los tipos</option>
+                        {% for tipo in ['foro','debate','taller','simposio','panel de expertos','seminario','conferencia'] %}
+                        <option value="{{ tipo }}" {% if filtros.tipo == tipo %}selected{% endif %}>
+                            {{ tipo|capitalize }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Filtro por fecha de inicio -->
+                <div class="col-md-2">
+                    <label class="form-label">Fecha desde</label>
+                    <input type="date" class="form-control" name="fecha_inicio" 
+                           value="{{ filtros.fecha_inicio }}">
+                </div>
+
+                <!-- Filtro por fecha de fin -->
+                <div class="col-md-2">
+                    <label class="form-label">Fecha hasta</label>
+                    <input type="date" class="form-control" name="fecha_fin" 
+                           value="{{ filtros.fecha_fin }}">
+                </div>
+
+                <!-- Botones -->
+                <div class="col-md-3 align-self-end">
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Filtrar</button>
+          <a href="{{ url_for('eventos.eventos_list') }}" class="btn btn-outline-secondary">Limpiar</a>
+        </div>
+                    </div>
+                </div>
+            </form>
+            
+
+
+
+    <!-- Grid de eventos -->
+    <div class="row g-4">
+        {% for e in filas %}
+        <div class="col-md-6 col-xl-4">
+            <div class="card h-100 shadow-sm">
+                <img class="card-img-top" src="{{ e.tipo_evento|imagen_evento }}" alt="{{e.tipo_evento}}">
+                <div class="card-body d-flex flex-column">
+                    <span class="badge text-bg-secondary mb-2">{{ e.tipo_evento|capitalize }}</span>
+                    <h5 class="card-title">{{ e.nombre }}</h5>
+                    <p class="small text-muted mb-1">
+                        {{ e.fecha_inicio|fecha_larga }}{% if e.fecha_fin %} – {{ e.fecha_fin|fecha_larga }}{% endif %}
+                    </p>
+                    <p class="small text-muted">{{ e.ciudad or e.lugar or 'Sin ubicación' }}</p>
+
+                    <!-- Mostrar porcentaje de asistencia -->
+                    <div class="mb-2">
+                        <strong>📊 Tu asistencia:</strong> {{ "%.1f"|format(e.porcentaje_asistencia or 0) }}%
+                        {% if e.porcentaje_asistencia and e.porcentaje_asistencia >= 80 %}
+                            <span class="badge bg-success ms-1">✅ Certificado disponible</span>
+                        {% elif e.porcentaje_asistencia %}
+                            <span class="badge bg-warning ms-1">⏳ {{ "%.1f"|format(80 - e.porcentaje_asistencia) }}% faltante</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="mt-auto d-flex gap-2 flex-wrap">
+                        <a class="btn btn-light" href="{{ url_for('eventos.evento_detalle', eid=e.id_evento) }}">Más info</a>
+                        
+                        <!-- Botón de certificado condicionado al 80% -->
+                        {% if e.asistio and e.porcentaje_asistencia and e.porcentaje_asistencia >= 80 %}
+                            <a class="btn btn-success" href="{{ url_for('eventos.certificado', insc_id=e.id_inscripcion) }}">
+                                📜 Descargar certificado
+                            </a>
+                        {% else %}
+                            <button class="btn btn-secondary" disabled title="{% if not e.asistio %}Esperando confirmación de asistencia{% else %}Necesitas 80% de asistencia{% endif %}">
+                                📜 Certificado
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-light border text-center py-5">
+                <i class="fas fa-calendar-times fa-2x text-muted mb-3"></i>
+                <h5 class="text-muted">
+                    {% if filtros.nombre or filtros.tipo or filtros.fecha_inicio or filtros.fecha_fin %}
+                        No se encontraron eventos con los filtros aplicados
+                    {% else %}
+                        No estás inscrito en ningún evento
+                    {% endif %}
+                </h5>
+                <p class="text-muted">
+                    {% if filtros.nombre or filtros.tipo or filtros.fecha_inicio or filtros.fecha_fin %}
+                        Intenta ajustar los filtros para ver más resultados.
+                    {% else %}
+                        ¡Explora los eventos disponibles e inscríbete!
+                    {% endif %}
+                </p>
+                <a href="{{ url_for('eventos.eventos_list') }}" class="btn btn-primary me-2">
+                    Ver eventos disponibles
+                </a>
+                {% if filtros.nombre or filtros.tipo or filtros.fecha_inicio or filtros.fecha_fin %}
+                <a href="{{ url_for('eventos.mis_eventos') }}" class="btn btn-outline-secondary">
+                    Limpiar filtros
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Paginación -->
+    {% if pagination.pages > 1 %}
+    <nav aria-label="Paginación de eventos" class="mt-5">
+        <ul class="pagination justify-content-center">
+            {% if pagination.page > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('eventos.mis_eventos', page=pagination.page-1, **filtros) }}">
+                    <i class="fas fa-chevron-left me-1"></i>Anterior
+                </a>
+            </li>
+            {% endif %}
+            
+            {% for p in range(1, pagination.pages + 1) %}
+            <li class="page-item {% if p == pagination.page %}active{% endif %}">
+                <a class="page-link" href="{{ url_for('eventos.mis_eventos', page=p, **filtros) }}">{{ p }}</a>
+            </li>
+            {% endfor %}
+            
+            {% if pagination.page < pagination.pages %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('eventos.mis_eventos', page=pagination.page+1, **filtros) }}">
+                    Siguiente<i class="fas fa-chevron-right ms-1"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="text-center text-muted mt-2">
+        Mostrando {{ filas|length }} de {{ pagination.total }} eventos
+        (Página {{ pagination.page }} de {{ pagination.pages }})
+    </div>
+    {% endif %}
+</div>
+
+<!-- Incluir Font Awesome para íconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.badge .text-white {
+    opacity: 0.8;
+}
+.badge .text-white:hover {
+    opacity: 1;
+}
+</style>
+{% endblock %}

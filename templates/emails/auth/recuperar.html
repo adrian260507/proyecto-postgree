@@ -1,0 +1,30 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Recuperación de Contraseña - Connexa{% endblock %}
+
+{% block header_title %}🔒 Recuperación de Contraseña{% endblock %}
+
+{% block content %}
+<h2>Hola {{ usuario_nombre }},</h2>
+
+<p>Has solicitado recuperar tu contraseña en el Sistema de Gestión de Talleres y Conferencias.</p>
+
+<div class="email-alert alert-info">
+    <p>Para restablecer tu contraseña, haz clic en el siguiente enlace:</p>
+    <div class="text-center mt-3 mb-3">
+        <a href="{{ url_reset }}" class="email-button">Restablecer Contraseña</a>
+    </div>
+    <p class="text-muted">Si el botón no funciona, copia y pega este enlace en tu navegador:</p>
+    <p style="word-break: break-all; background: #f8f9fa; padding: 10px; border-radius: 5px; font-size: 12px;">
+        {{ url_reset }}
+    </p>
+</div>
+
+<p><em>Este enlace expirará en 1 hora.</em></p>
+
+<p>Si no solicitaste este cambio, por favor ignora este mensaje.</p>
+
+<div class="email-alert alert-warning mt-4">
+    <strong>💡 Seguridad:</strong> Si no reconoces esta solicitud, por favor contacta a soporte inmediatamente.
+</div>
+{% endblock %}

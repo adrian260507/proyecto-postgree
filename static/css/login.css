@@ -1,0 +1,21 @@
+.bg-login {
+    background: url("../images/Gemini_Generated_Image_tp0nm4tp0nm4tp0n.png") no-repeat center center;
+    background-size: cover;
+}
+
+/* Ajustes del card de login */
+.login-card {
+    max-width: 380px;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+}
+
+/* Logo Connexa */
+.logo-sgtc {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #2b4ba3;
+    text-align: center;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+}

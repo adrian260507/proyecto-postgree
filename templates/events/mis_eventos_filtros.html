@@ -1,0 +1,68 @@
+<!-- templates/events/mis_eventos_filtros.html -->
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">
+      <i class="fas fa-filter me-2"></i>Filtrar Mis Eventos
+    </h5>
+    <form method="get" class="row g-3">
+      <input type="hidden" name="page" value="1">
+      
+      <div class="col-md-3">
+        <label class="form-label">Nombre del evento</label>
+        <input type="text" class="form-control" name="nombre" 
+               value="{{ filtros.nombre }}" placeholder="Buscar por nombre...">
+      </div>
+      
+      <div class="col-md-2">
+        <label class="form-label">Tipo</label>
+        <select class="form-select" name="tipo">
+          <option value="">Todos</option>
+          {% for tipo in ['foro','debate','taller','simposio','panel de expertos','seminario','conferencia'] %}
+          <option value="{{ tipo }}" {% if filtros.tipo == tipo %}selected{% endif %}>
+            {{ tipo|capitalize }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <div class="col-md-2">
+        <label class="form-label">Estado</label>
+        <select class="form-select" name="estado">
+          <option value="">Todos</option>
+          <option value="activos" {% if filtros.estado == 'activos' %}selected{% endif %}>Activos</option>
+          <option value="pasados" {% if filtros.estado == 'pasados' %}selected{% endif %}>Pasados</option>
+          <option value="futuros" {% if filtros.estado == 'futuros' %}selected{% endif %}>Futuros</option>
+        </select>
+      </div>
+      
+      <div class="col-md-2">
+        <label class="form-label">Certificado</label>
+        <select class="form-select" name="certificado">
+          <option value="">Todos</option>
+          <option value="disponible" {% if filtros.certificado == 'disponible' %}selected{% endif %}>Disponible</option>
+          <option value="no_disponible" {% if filtros.certificado == 'no_disponible' %}selected{% endif %}>No disponible</option>
+        </select>
+      </div>
+      
+      <div class="col-md-3 align-self-end">
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Filtrar</button>
+          <a href="{{ url_for('eventos.mis_eventos') }}" class="btn btn-outline-secondary">Limpiar</a>
+        </div>
+      </div>
+    </form>
+    
+    <!-- Mostrar resumen de filtros aplicados -->
+    {% if filtros.nombre or filtros.tipo or filtros.estado or filtros.certificado %}
+    <div class="mt-3">
+      <small class="text-muted">
+        Filtros aplicados: 
+        {% if filtros.nombre %}<span class="badge bg-light text-dark">Nombre: {{ filtros.nombre }}</span>{% endif %}
+        {% if filtros.tipo %}<span class="badge bg-light text-dark">Tipo: {{ filtros.tipo }}</span>{% endif %}
+        {% if filtros.estado %}<span class="badge bg-light text-dark">Estado: {{ filtros.estado }}</span>{% endif %}
+        {% if filtros.certificado %}<span class="badge bg-light text-dark">Certificado: {{ 'Disponible' if filtros.certificado == 'disponible' else 'No disponible' }}</span>{% endif %}
+      </small>
+    </div>
+    {% endif %}
+  </div>
+</div>

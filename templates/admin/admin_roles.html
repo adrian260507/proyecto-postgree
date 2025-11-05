@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Asignación de roles</h3>
+<table class="table table-striped align-middle">
+  <thead>
+    <tr>
+      <th>Usuario</th><th>Correo</th><th>Rol actual</th><th>Cambiar a</th><th>estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in usuarios %}
+    <tr>
+      <td>{{ u.nombre }} {{ u.apellido }}</td>
+      <td>{{ u.correo }}</td>
+      <td>{{ u.rol or 'Usuario' }}</td>
+      <td>
+        <form method="post" action="{{ url_for('admin.admin_roles_asignar') }}" class="d-flex gap-2">
+          <input type="hidden" name="id_usuario" value="{{ u.ID_usuario }}">
+          <select name="id_rol" class="form-select">
+            {% for r in roles %}
+              <option value="{{ r.id_rol }}" {% if (u.rol or 'Usuario') == r.nombre %}selected{% endif %}>{{ r.nombre }}</option>
+            {% endfor %}
+          </select>
+      </td>
+      <td>
+          <select name="actividad" class="form-select">
+            <option value="1" {% if u.activo == 1 %}selected{% endif %}>Activo</option>
+            <option value="0" {% if u.activo == 0 %}selected{% endif %}>suspendido</option>            
+          </select>
+      </td>
+      <td>
+          <button class="btn btn-primary">Guardar</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

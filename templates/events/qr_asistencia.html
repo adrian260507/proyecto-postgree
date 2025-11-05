@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Encabezado -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body text-center py-4">
+                    <h1 class="display-6 fw-bold text-primary mb-3">
+                        <i class="fas fa-qrcode me-2"></i>QR de Asistencia
+                    </h1>
+                    <h2 class="h4 text-dark mb-3">{{ ev.nombre }}</h2>
+                    <p class="text-muted mb-0">
+                        Muestra este código QR para que los participantes escaneen y marquen asistencia automáticamente
+                    </p>
+                </div>
+            </div>
+
+            <!-- QR Principal -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body text-center p-5">
+                    {% if qr_data %}
+                    <div class="mb-4">
+                         <!-- Imagen del código QR generado -->
+
+                        <img src="{{ qr_data.qr_image }}" alt="QR Asistencia" 
+                             class="img-fluid rounded-3 border" style="max-width: 300px;">
+                    </div>
+                    
+                    <div class="alert alert-info mb-4">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-info-circle me-2"></i>Instrucciones
+                        </h5>
+                        <p class="mb-2">Los participantes deben:</p>
+                        <ol class="text-start mb-0">
+                            <li>Abrir la cámara o app de QR en su celular</li>
+                            <li>Escanear este código</li>
+                            <li>Iniciar sesión si no lo han hecho</li>
+                            <li>¡La asistencia se marcará automáticamente!</li>
+                        </ol>
+                    </div>
+
+                    <!-- Información del QR -->
+                    <div class="row text-center">
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3 border rounded">
+                                <i class="fas fa-clock text-warning fa-2x mb-2"></i>
+                                <h6>Expira a las</h6>
+                                <p class="fw-bold mb-0">{{ qr_data.expiracion.strftime('%H:%M') }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3 border rounded">
+                                <i class="fas fa-link text-primary fa-2x mb-2"></i>
+                                <h6>Enlace directo</h6>
+                                <a href="{{ qr_data.qr_url }}" target="_blank" class="small">
+                                    {{ qr_data.qr_url[:30] }}...
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <!-- Mensaje de error si no se pudo generar el QR -->
+
+                    <div class="alert alert-danger">
+                        <h5 class="alert-heading">Error al generar QR</h5>
+                        <p class="mb-0">No se pudo generar el código QR. Por favor, intenta nuevamente.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Opciones -->
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                          <!-- Generar nuevo QR -->
+
+<a href="{{ url_for('eventos.generar_qr_asistencia_page', eid=ev.id_evento) }}" 
+                               class="btn btn-outline-primary w-100">
+                                <i class="fas fa-sync-alt me-2"></i>Generar Nuevo QR
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                          <!-- Volver a la gestión de asistencia -->
+
+                            <a href="{{ url_for('eventos.asistencia', eid=ev.id_evento) }}" 
+                               class="btn btn-secondary w-100">
+                                <i class="fas fa-list me-2"></i>Volver a Asistencia
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Agregar Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+.card {
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}

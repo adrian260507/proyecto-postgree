@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Panel Organizador</h3>
+<p class="text-muted">Solo puedes ver y administrar tus eventos.</p>
+<div class="d-flex gap-2 flex-wrap">
+  <a class="btn btn-primary" href="{{ url_for('eventos.eventos_list') }}">Mis eventos</a>
+  <a class="btn btn-success" href="{{ url_for('eventos.eventos_nuevo') }}">Crear evento</a>
+</div>
+{% endblock %}

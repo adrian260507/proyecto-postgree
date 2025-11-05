@@ -1,0 +1,31 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Confirmación de Contacto - Connexa{% endblock %}
+
+{% block header_title %}✅ Confirmación de Recepción{% endblock %}
+
+{% block content %}
+<h2>Hola {{ nombre }},</h2>
+
+<p>Hemos recibido tu mensaje con el asunto: <strong>"{{ asunto }}"</strong></p>
+
+<!-- Información sobre el proceso de respuesta -->
+
+<div class="email-alert alert-success">
+    <h3 class="mt-0">📋 Qué puedes esperar:</h3>
+    <ul style="margin-bottom: 0;">
+        <li>Revisaremos tu mensaje y te responderemos a la brevedad</li>
+        <li>Nuestro tiempo de respuesta habitual es de 24-48 horas</li>
+        <li>Si el asunto es urgente, lo trataremos con prioridad</li>
+    </ul>
+</div>
+
+<!-- Información de contacto adicional -->
+
+<div class="info-box">
+    <h3 class="mt-0">📞 ¿Necesitas ayuda inmediata?</h3>
+    <p>Puedes contactarnos directamente a: <a href="mailto:asistenciasgtc@gmail.com" style="color: #007bff; text-decoration: none;">asistenciasgtc@gmail.com</a></p>
+</div>
+
+<p>Gracias por contactarnos,</p>
+{% endblock %}

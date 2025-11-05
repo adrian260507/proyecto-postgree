@@ -1,0 +1,37 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Certificado Disponible - Connexa{% endblock %}
+
+{% block header_title %}🎓 Certificado Disponible{% endblock %}
+
+{% block content %}
+<h2>¡Felicidades {{ usuario_nombre }}!</h2>
+
+<p>Tu certificado de participación está listo para descargarse.</p>
+<!-- Sección de información del evento -->
+
+<div class="info-box">
+    <h3 class="mt-0">📋 Información del evento</h3>
+    <p><strong>Evento:</strong> {{ evento_nombre }}</p>
+    <p><strong>Tipo:</strong> {{ evento_tipo }}</p>
+    <p><strong>Fechas:</strong> {{ fecha_inicio }} - {{ fecha_fin }}</p>
+    <p><strong>Tu porcentaje de asistencia:</strong> 
+        <span style="font-size: 32px; font-weight: bold; color: #28a745; display: block;">{{ porcentaje_asistencia }}%</span>
+    </p>
+</div>
+
+<!-- Botón de descarga del certificado -->
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ url_descarga }}" style="display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+        📥 Descargar Certificado
+    </a>
+</div>
+<!-- Nota informativa -->
+
+<div style="padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #ffeaa7; background-color: #fff3cd; color: #856404;">
+    <strong>💡 Nota:</strong> El certificado también se ha enviado como archivo adjunto a este correo.
+</div>
+{% endblock %}
+
+<!--dad -->

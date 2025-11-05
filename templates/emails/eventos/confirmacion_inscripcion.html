@@ -1,0 +1,58 @@
+{% extends "emails/base.html" %}
+
+{% block title %}Confirmación de Inscripción - Connexa{% endblock %}
+
+{% block header_title %}✅ Confirmación de Inscripción{% endblock %}
+
+{% block content %}
+<h2>Hola {{ usuario_nombre }},</h2>
+
+<p>Tu inscripción al evento <strong>"{{ evento_nombre }}"</strong> ha sido confirmada.</p>
+
+<!-- Detalles específicos del evento -->
+
+<div class="info-box">
+    <h3 class="mt-0">📋 Detalles del Evento</h3>
+    <p><strong>Evento:</strong> {{ evento_nombre }}</p>
+    <p><strong>Tipo:</strong> {{ evento_tipo }}</p>
+    <p><strong>Fechas:</strong> {{ fecha_inicio }} - {{ fecha_fin }}</p>
+    <p><strong>Modalidad:</strong> {{ modalidad }}</p>
+    
+<!-- Muestra enlace virtual para eventos virtuales -->
+
+    {% if modalidad == 'virtual' and enlace_virtual %}
+    <p><strong>🔗 Enlace de acceso:</strong> 
+        <a href="{{ enlace_virtual }}" style="color: #007bff; text-decoration: none;">{{ enlace_virtual }}</a>
+    </p>
+    {% else %}
+
+        <!-- Muestra ubicación para eventos presenciales -->
+
+    <p><strong>📍 Lugar:</strong> {{ lugar }}, {{ ciudad }}</p>
+    {% endif %}
+</div>
+
+<!-- Instrucciones específicas según la modalidad -->
+
+{% if modalidad == 'virtual' and enlace_virtual %}
+<div class="email-alert alert-info">
+    <h4 class="mt-0">💡 Instrucciones para evento virtual:</h4>
+    <ul style="margin-bottom: 0;">
+        <li>Guarda este enlace para el día del evento</li>
+        <li>Accede unos minutos antes del horario programado</li>
+        <li>Asegúrate de tener buena conexión a internet</li>
+    </ul>
+</div>
+{% else %}
+<div class="email-alert alert-info">
+    <h4 class="mt-0">💡 Instrucciones para evento presencial:</h4>
+    <ul style="margin-bottom: 0;">
+        <li>Llega 15 minutos antes del horario programado</li>
+        <li>Trae identificación oficial</li>
+        <li>Registra tu asistencia al llegar</li>
+    </ul>
+</div>
+{% endif %}
+
+<p class="mt-4">¡Te esperamos en el evento!</p>
+{% endblock %}
